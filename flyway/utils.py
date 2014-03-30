@@ -39,11 +39,11 @@ def getGlanceClient(version='1', endpoint=None, token=None, **kwargs):
 	return glclient(version=version, endpoint=endpoint, token=token)
 
 
-def getNovaClient(username=None,api_key=None, auth_url=None, project_id=None, **kwargs):
+def getNovaClient(username=None,api_key=None, auth_url=None, project_id=None, bypass_url=None, **kwargs):
 	"""Get nova client
 	"""
 	return nvclient.Client(username=username, api_key=api_key,
-			       auth_url=auth_url, project_id=project_id)
+			       auth_url=auth_url, project_id=project_id, bypass_url=bypass_url)
 
 
 def getSourceKeystoneCredentials():
@@ -104,6 +104,7 @@ def getSourceNovaCredentials():
         credentials['api_key'] = cfg.CONF.SOURCE.os_password
         credentials['auth_url'] = cfg.CONF.SOURCE.os_auth_url
         credentials['project_id'] = cfg.CONF.SOURCE.os_tenant_name
+        credentials['bypass_url'] = cfg.CONF.SOURCE.os_bypass_url
 	return credentials
 
 
@@ -116,6 +117,7 @@ def getTargetNovaCredentials():
         credentials['api_key'] = cfg.CONF.TARGET.os_password
         credentials['auth_url'] = cfg.CONF.TARGET.os_auth_url
         credentials['project_id'] = cfg.CONF.TARGET.os_tenant_name
+        credentials['bypass_url'] = cfg.CONF.TARGET.os_bypass_url
 	return credentials
 
 	

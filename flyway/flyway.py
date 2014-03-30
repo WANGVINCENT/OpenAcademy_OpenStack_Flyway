@@ -36,7 +36,7 @@ def main():
 		
 		#Interaction with database and store cloud credentials into source cloud database
 		while True:
-			passwd = getpass.getpass('The source cloud credentials will be stored into mysql database, please type in source cloud mysql database password. If password is equal to admin password, type in Enter directly!\nPassword:\n')
+			passwd = getpass.getpass('The source cloud credentials will be stored into mysql database, please type in source cloud mysql database password. If password is the same as the admin password, type in Enter directly!\nPassword:\n')
 			if passwd is not '':
 				password = passwd
 			else:

@@ -26,21 +26,42 @@ from utils import *
 LOG = logging.getLogger(__name__)
 
 class KeypairMigrationTask(task.Task):
-    """
-    Task to migrate all keypairs from the source cloud to the target cloud.
+    """Task to migrate all keypairs from the source cloud to the target cloud.
     """
 
     def execute(self):
         LOG.info('Migrating all keypairs ...')
+
+        #--------------------Vagrant---------------------------
+         
+    	ks_source_credentials = getSourceKeystoneCredentials()
+	ks_target_credentials = getTargetKeystoneCredentials()
 	
+	ks_source = getKeystoneClient(**ks_source_credentials)
+	ks_target = getKeystoneClient(**ks_target_credentials)
+
+	ks_source_auth = getAuthenticationRef(ks_source_credentials)
+	ks_source_token = getToken(ks_source_auth)
+	ks_source_token_id = getTokenId(ks_source_token)
+	ks_source_tenant_id = getTenantId(ks_source_token)
+
+	ks_target_auth = getAuthenticationRef(ks_target_credentials)
+	ks_target_token = getToken(ks_target_auth)
+	ks_target_token_id = getTokenId(ks_target_token)
+	ks_target_tenant_id = getTenantId(ks_target_token)
+	
+	#--------------------Vagrant---------------------------
+    
 	nv_source_credentials = getSourceNovaCredentials()
 	nv_target_credentials = getTargetNovaCredentials()
-	
+
+	nv_source_credentials['bypass_url'] = nv_source_credentials['bypass_url'] + ks_source_tenant_id
+	nv_target_credentials['bypass_url'] = nv_target_credentials['bypass_url'] + ks_target_tenant_id
+
 	nv_source = getNovaClient(**nv_source_credentials)
 	nv_target = getNovaClient(**nv_target_credentials)
 	
-	'''
-	Find out whether the source cloud keypair exist in target cloud
+	'''Find out whether the source cloud keypair exist in target cloud
 	If not, migrate it to target cloud   
 	'''	
 	target_keypair_pubs = []
